@@ -1,0 +1,82 @@
+name: banner-fingerprint
+
+services:
+  server:
+    image: banner-fingerprint-server:local
+    build:
+      context: .
+      target: server
+    environment:
+      LISTEN_ADDR: ":8080"
+      RULES_PATH: "/app/configs/fingerprints.json"
+      MAX_BODY_BYTES: "4194304"
+      MAX_BATCH_SIZE: "1000"
+      MAX_BANNER_BYTES: "65536"
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - type: bind
+        source: ./configs/fingerprints.json
+        target: /app/configs/fingerprints.json
+        read_only: true
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "/server", "healthcheck", "-url", "http://127.0.0.1:8080/health", "-timeout", "3s"]
+      interval: 5s
+      timeout: 4s
+      start_period: 3s
+      retries: 5
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    user: "65532:65532"
+    init: true
+    pids_limit: 100
+    mem_limit: 128m
+    cpus: 1.0
+    restart: unless-stopped
+
+  client:
+    image: banner-fingerprint-client:local
+    build:
+      context: .
+      target: client
+    profiles:
+      - tools
+    environment:
+      SERVER_URL: "http://server:8080"
+    depends_on:
+      server:
+        condition: service_healthy
+        restart: true
+    volumes:
+      - type: bind
+        source: ./testdata
+        target: /data
+        read_only: true
+    networks:
+      - backend
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    user: "65532:65532"
+    init: true
+    pids_limit: 50
+    mem_limit: 64m
+    cpus: 0.5
+    restart: "no"
+
+networks:
+  backend:
+    driver: bridge
+    internal: true
+

@@ -1,0 +1,180 @@
+{
+  "os_hints": [
+    {"pattern": "(?i)ubuntu", "value": "Ubuntu"},
+    {"pattern": "(?i)debian", "value": "Debian"},
+    {"pattern": "(?i)freebsd", "value": "FreeBSD"},
+    {"pattern": "(?i)(?:microsoft|windows)", "value": "Windows"},
+    {"pattern": "(?i)centos", "value": "CentOS"},
+    {"pattern": "(?i)alpine", "value": "Alpine Linux"}
+  ],
+  "rules": [
+    {
+      "id": "ssh-openssh",
+      "priority": 100,
+      "protocol": "SSH",
+      "product": "OpenSSH",
+      "ports": [22],
+      "pattern": "(?i)^SSH-[0-9]+\\.[0-9]+-OpenSSH[_/ -](?P<version>[0-9]+(?:\\.[0-9]+)*(?:p[0-9]+)?[A-Za-z0-9._-]*)",
+      "version_group": "version",
+      "confidence": 0.93,
+      "port_bonus": 0.02,
+      "port_penalty": 0.03
+    },
+    {
+      "id": "http-nginx",
+      "priority": 100,
+      "protocol": "HTTP",
+      "product": "nginx",
+      "ports": [80, 443, 8000, 8080, 8443],
+      "pattern": "(?im)^Server[ \\t]*:[ \\t]*nginx(?:/(?P<version>[0-9][A-Za-z0-9._-]*))?",
+      "version_group": "version",
+      "confidence": 0.88,
+      "port_bonus": 0.02,
+      "port_penalty": 0.03
+    },
+    {
+      "id": "http-apache",
+      "priority": 100,
+      "protocol": "HTTP",
+      "product": "Apache",
+      "ports": [80, 443, 8000, 8080, 8443],
+      "pattern": "(?im)^Server[ \\t]*:[ \\t]*Apache(?: HTTP Server)?(?:/(?P<version>[0-9][A-Za-z0-9._-]*))?",
+      "version_group": "version",
+      "confidence": 0.88,
+      "port_bonus": 0.02,
+      "port_penalty": 0.03
+    },
+    {
+      "id": "http-jetty",
+      "priority": 100,
+      "protocol": "HTTP",
+      "product": "Jetty",
+      "ports": [80, 443, 8000, 8080, 8443],
+      "pattern": "(?im)(?:^Server[ \\t]*:[ \\t]*)?Jetty(?:\\(|/|-)?(?P<version>[0-9]+(?:\\.[0-9]+){1,3})",
+      "version_group": "version",
+      "confidence": 0.83,
+      "port_bonus": 0.02,
+      "port_penalty": 0.03
+    },
+    {
+      "id": "mysql-mariadb-handshake",
+      "priority": 110,
+      "protocol": "MySQL",
+      "product": "MariaDB",
+      "ports": [3306],
+      "pattern": "(?is)^\\x0a(?P<version>[0-9]+\\.[0-9]+\\.[0-9]+(?:-[A-Za-z0-9._-]*MariaDB[A-Za-z0-9._-]*))\\x00",
+      "version_group": "version",
+      "confidence": 0.9,
+      "port_bonus": 0.02,
+      "port_penalty": 0.03
+    },
+    {
+      "id": "mysql-handshake",
+      "priority": 100,
+      "protocol": "MySQL",
+      "product": "MySQL",
+      "ports": [3306],
+      "pattern": "(?s)^\\x0a(?P<version>[0-9]+\\.[0-9]+\\.[0-9]+(?:-[A-Za-z0-9._-]+)?)\\x00",
+      "version_group": "version",
+      "confidence": 0.88,
+      "port_bonus": 0.02,
+      "port_penalty": 0.03
+    },
+    {
+      "id": "mysql-text",
+      "priority": 95,
+      "protocol": "MySQL",
+      "product": "MySQL",
+      "ports": [3306],
+      "pattern": "(?i)\\bMySQL(?: Server)?[/ -](?P<version>[0-9]+\\.[0-9]+\\.[0-9]+(?:-[A-Za-z0-9._-]+)?)",
+      "version_group": "version",
+      "confidence": 0.83,
+      "port_bonus": 0.02,
+      "port_penalty": 0.03
+    },
+    {
+      "id": "redis",
+      "priority": 100,
+      "protocol": "Redis",
+      "product": "Redis",
+      "ports": [6379],
+      "pattern": "(?im)(?:^redis_version:(?P<version>[0-9][A-Za-z0-9._-]*)|^\\+PONG[ \\t]*\\r?$|^-NOAUTH\\b|^-DENIED Redis\\b|^\\+OK[ \\t]*\\r?$)",
+      "version_group": "version",
+      "confidence": 0.68,
+      "port_bonus": 0.02,
+      "port_penalty": 0.03
+    },
+    {
+      "id": "ftp-proftpd",
+      "priority": 100,
+      "protocol": "FTP",
+      "product": "ProFTPD",
+      "ports": [21],
+      "pattern": "(?im)^220[ -].*ProFTPD(?:[ /](?P<version>[0-9][A-Za-z0-9._-]*))?",
+      "version_group": "version",
+      "confidence": 0.88,
+      "port_bonus": 0.02,
+      "port_penalty": 0.03
+    },
+    {
+      "id": "ftp-vsftpd",
+      "priority": 100,
+      "protocol": "FTP",
+      "product": "vsFTPd",
+      "ports": [21],
+      "pattern": "(?im)^220[ -].*vsFTPd(?:[ /](?P<version>[0-9][A-Za-z0-9._-]*))?",
+      "version_group": "version",
+      "confidence": 0.88,
+      "port_bonus": 0.02,
+      "port_penalty": 0.03
+    },
+    {
+      "id": "ftp-filezilla",
+      "priority": 100,
+      "protocol": "FTP",
+      "product": "FileZilla Server",
+      "ports": [21],
+      "pattern": "(?im)^220[ -].*FileZilla Server(?:[ /](?P<version>[0-9][A-Za-z0-9._-]*))?",
+      "version_group": "version",
+      "confidence": 0.86,
+      "port_bonus": 0.02,
+      "port_penalty": 0.03
+    },
+    {
+      "id": "ssh-generic",
+      "priority": 20,
+      "protocol": "SSH",
+      "product": "",
+      "ports": [22],
+      "pattern": "(?i)^SSH-[0-9]+\\.[0-9]+-",
+      "version_group": "",
+      "confidence": 0.63,
+      "port_bonus": 0.02,
+      "port_penalty": 0.03
+    },
+    {
+      "id": "http-generic",
+      "priority": 20,
+      "protocol": "HTTP",
+      "product": "",
+      "ports": [80, 443, 8000, 8080, 8443],
+      "pattern": "(?im)^(?:HTTP/[0-9](?:\\.[0-9])?[ \\t]+[0-9]{3}\\b|(?:GET|POST|HEAD|PUT|DELETE|OPTIONS|PATCH)[ \\t]+\\S+[ \\t]+HTTP/[0-9])",
+      "version_group": "",
+      "confidence": 0.63,
+      "port_bonus": 0.02,
+      "port_penalty": 0.03
+    },
+    {
+      "id": "ftp-generic",
+      "priority": 20,
+      "protocol": "FTP",
+      "product": "",
+      "ports": [21],
+      "pattern": "(?im)^220[ -].*FTP",
+      "version_group": "",
+      "confidence": 0.6,
+      "port_bonus": 0.02,
+      "port_penalty": 0.03
+    }
+  ]
+}

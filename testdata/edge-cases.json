@@ -1,0 +1,8 @@
+[
+  {"ip":"empty-banner","port":0,"banner":""},
+  {"ip":"wrong-port","port":12345,"banner":"HTTP/1.1 200 OK\r\nServer: nginx/1.25.4\r\n\r\n"},
+  {"ip":"unicode","port":9999,"banner":"未知服务 🚀"},
+  {"ip":"generic-http","port":8000,"banner":"HTTP/1.1 204 No Content\r\n\r\n"},
+  {"ip":"generic-ssh","port":2222,"banner":"SSH-2.0-CustomSSH_1.0"}
+]
+
