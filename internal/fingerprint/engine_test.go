@@ -36,16 +36,24 @@ func TestIdentifyRequiredFingerprints(t *testing.T) {
 			protocol: "HTTP", product: "Jetty", version: "9.4.51", confidence: 0.85,
 		},
 		{
-			name: "MySQL handshake", input: model.ScanInput{IP: "1.2.3.7", Port: 3306, Banner: "\x0a8.0.32\x00\x01\x00\x00\x00mysql_native_password\x00"},
+			name: "MySQL packet-framed handshake", input: model.ScanInput{IP: "1.2.3.7", Port: 3306, Banner: "J\x00\x00\x00\x0a8.0.32\x00"},
 			protocol: "MySQL", product: "MySQL", version: "8.0.32", confidence: 0.9,
 		},
 		{
-			name: "Redis", input: model.ScanInput{IP: "1.2.3.8", Port: 6379, Banner: "-NOAUTH Authentication required.\r\n"},
+			name: "Redis error", input: model.ScanInput{IP: "1.2.3.8", Port: 6379, Banner: "-ERR wrong number of arguments for 'get' command"},
 			protocol: "Redis", product: "Redis", confidence: 0.7,
 		},
 		{
-			name: "ProFTPD", input: model.ScanInput{IP: "1.2.3.9", Port: 21, Banner: "220 ProFTPD 1.3.7 Server ready.\r\n"},
+			name: "ProFTPD repeated product", input: model.ScanInput{IP: "1.2.3.9", Port: 21, Banner: "220 ProFTPD 1.3.7 Server (ProFTPD)"},
 			protocol: "FTP", product: "ProFTPD", version: "1.3.7", confidence: 0.9,
+		},
+		{
+			name: "Microsoft IIS", input: model.ScanInput{IP: "1.2.3.20", Port: 8888, Banner: "HTTP/1.1 200 OK\r\nServer: Microsoft-IIS/10.0"},
+			protocol: "HTTP", product: "Microsoft-IIS", version: "10.0", osHint: "Windows", confidence: 0.88,
+		},
+		{
+			name: "Pure FTPd", input: model.ScanInput{IP: "1.2.3.22", Port: 21, Banner: "220 Welcome to Pure-FTPd"},
+			protocol: "FTP", product: "Pure-FTPd", confidence: 0.88,
 		},
 		{
 			name: "unknown", input: model.ScanInput{IP: "1.2.3.11", Port: 12345, Banner: "unrecognized service"},

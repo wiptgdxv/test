@@ -32,7 +32,7 @@ Client 容器通过 Compose DNS 地址 `http://server:8080` 访问 Server，而�
 规则成功加载后返回：
 
 ```json
-{"rules_loaded":14,"status":"ok"}
+{"rules_loaded":16,"status":"ok"}
 ```
 
 Compose 健康检查使用 Server 二进制的 `healthcheck` 子命令真实请求该接口，并校验状态和规则数量。
