@@ -13,7 +13,7 @@ services:
       MAX_BATCH_SIZE: "1000"
       MAX_BANNER_BYTES: "65536"
     ports:
-      - "127.0.0.1:8080:8080"
+      - "0.0.0.0:8080:8080"
     volumes:
       - type: bind
         source: ./configs/fingerprints.json
